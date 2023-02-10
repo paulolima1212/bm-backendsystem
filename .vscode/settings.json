@@ -1,0 +1,16 @@
+{
+  "githubPullRequests.ignoredPullRequestBranches": ["main"],
+  "editor.formatOnSave": true,
+  "cSpell.ignoreWords": ["DINHEIRO", "Finaly", "MBWAY", "nestjs"],
+  "cSpell.words": ["categorie", "paymethod"],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "node_modules": true,
+    "dist": true
+  }
+}

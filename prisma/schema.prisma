@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model CategoryToExtra {
+  A String
+  B String
+
+  @@unique([A, B], map: "_CategoryToExtra_AB_unique")
+  @@index([B], map: "_CategoryToExtra_B_index")
+  @@map("_CategoryToExtra")
+}
+
+model CategoryToOption {
+  A String
+  B String
+
+  @@unique([A, B], map: "_CategoryToOption_AB_unique")
+  @@index([B], map: "_CategoryToOption_B_index")
+  @@map("_CategoryToOption")
+}
+
+model Call_Service {
+  id         String                @id @default(uuid())
+  client     String
+  table      String
+  service    call_services_service
+  is_done    Boolean               @default(false)
+  create_at  DateTime              @default(now())
+  updated_at DateTime              @default(now())
+
+  @@map("call_services")
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  image       String?
+  option_id   String?
+  extra_id    String?
+  is_card     Boolean   @default(false)
+  create_at   DateTime  @default(now())
+  Product     Product[]
+
+  @@map("categories")
+}
+
+model Extra {
+  id        String   @id @default(uuid())
+  option    String
+  price     Decimal
+  create_at DateTime @default(now())
+
+  @@map("extras")
+}
+
+model Option {
+  id        String   @id @default(uuid())
+  option    String
+  create_at DateTime @default(now())
+
+  @@map("options")
+}
+
+model Order {
+  id             String           @id @default(uuid())
+  client         String
+  nif            String?
+  table          String
+  paymethod      orders_paymethod @default(DINHEIRO)
+  total_pay      Decimal          @default(0.000000000000000000000000000000)
+  status         Boolean          @default(false)
+  status_payment Boolean          @default(false)
+  create_at      DateTime         @default(now())
+
+  @@map("orders")
+}
+
+model Order_Product {
+  id         String @id @default(uuid())
+  order_id   String
+  product_id String
+  quantity   Float
+
+  @@index([order_id])
+  @@index([product_id])
+  @@map("orders_products")
+}
+
+model Product {
+  id             String          @id @default(uuid())
+  bar_code       String?         @unique
+  name           String
+  price          Decimal
+  cost           Decimal         @default(0.000000000000000000000000000000)
+  unit           products_unit   @default(UN)
+  description    String?         @default("")
+  image          String?         @default("")
+  validate_stock Boolean         @default(false)
+  use_card       Boolean         @default(false)
+  special_card   Boolean         @default(false)
+  categoryId     String
+  create_at      DateTime        @default(now())
+  category       Category        @relation(fields: [categoryId], references: [id])
+  Stock_Product  Stock_Product[]
+
+  @@index([categoryId])
+  @@map("products")
+}
+
+model Stock {
+  id            String          @id @default(uuid())
+  quant         Decimal
+  create_at     DateTime        @default(now())
+  updated_at    DateTime        @default(now())
+  Stock_Product Stock_Product[]
+
+  @@map("stocks")
+}
+
+model Stock_Product {
+  id        String   @id @default(uuid())
+  create_at DateTime @default(now())
+  productId String
+  stockId   String
+  product   Product  @relation(fields: [productId], references: [id])
+  stock     Stock    @relation(fields: [stockId], references: [id])
+
+  @@index([productId])
+  @@index([stockId])
+  @@map("stocks_products")
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+  username String
+
+  @@map("users")
+}
+
+enum call_services_service {
+  PAYCHECK
+  HELP
+}
+
+enum orders_paymethod {
+  MBWAY
+  DINHEIRO
+}
+
+enum products_unit {
+  UN
+  KG
+}
