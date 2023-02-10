@@ -1,8 +1,8 @@
 {
-  "name": "bolacha_serve",
-  "version": "0.0.1",
+  "name": "bolacha_server",
+  "version": "1.0.0",
   "description": "",
-  "author": "",
+  "author": "plima1212",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
