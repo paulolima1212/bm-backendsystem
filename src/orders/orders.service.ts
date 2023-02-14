@@ -47,19 +47,20 @@ export class OrdersService {
 
   findAll() {
     try {
-      return this.prismaService.order.findMany({
-        select: {
-          client: true,
-          create_at: true,
-          id: true,
-          nif: true,
-          paymethod: true,
-          status: true,
-          status_payment: true,
-          total_pay: true,
-          table: true,
-        },
-      });
+      return this.prismaService.$queryRaw`
+        SELECT 
+          o.id, o.client , o.table , o.paymethod , p.name , p.price , op.quantity , (p.price * op.quantity) AS total
+        FROM 
+          orders o 
+        INNER JOIN orders_products op 
+          ON	o.id = op.order_id 
+        INNER JOIN products p 
+          ON op.product_id = p.id 
+        WHERE 
+          o.status = 0
+        ORDER BY 
+          o.create_at
+      `;
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(err);
