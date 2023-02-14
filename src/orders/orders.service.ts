@@ -6,6 +6,7 @@ import {
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { Order, Product } from './dto/order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -44,26 +45,52 @@ export class OrdersService {
     }
   }
 
-  findAll() {
-    try {
-      return this.prismaService.$queryRaw`
-        SELECT 
-          o.id, o.client , o.table , o.paymethod , op.order_id, p.id AS product_id, p.name , p.price , op.quantity , (p.price * op.quantity) AS total
-        FROM 
-          orders o 
-        INNER JOIN orders_products op 
-          ON	o.id = op.order_id 
-        INNER JOIN products p 
-          ON op.product_id = p.id 
-        WHERE 
+  async findAll() {
+    const orders: Order[] = await this.prismaService.$queryRaw`
+        SELECT
+          o.id,
+          o.client ,
+          o.table ,
+          o.paymethod
+        FROM
+          orders o
+        WHERE
           o.status = 0
-        ORDER BY 
+        ORDER BY
           o.create_at
       `;
-    } catch (err) {
-      console.log(err);
-      throw new InternalServerErrorException(err);
-    }
+    const listProducts: Product[] = await this.prismaService.$queryRaw`
+        SELECT
+          o.id AS order_id, p.id , p.name , p.price , op.quantity 
+        FROM
+          orders_products op 
+        INNER JOIN orders o 
+          ON	op.order_id = o.id 
+        INNER JOIN products p 
+          ON	p.id = op.product_id 
+        WHERE
+          o.status = 0
+        ORDER BY
+          o.create_at
+      `;
+
+    const newListOrder = orders.map((order) => {
+      const products = listProducts.filter((product) => {
+        if (product.order_id === order.id) {
+          return product;
+        }
+      });
+
+      return {
+        id: order.id,
+        client: order.client,
+        table: order.table,
+        paymethod: order.paymethod,
+        products,
+      };
+    });
+
+    return newListOrder;
   }
 
   findOne(id: string) {
