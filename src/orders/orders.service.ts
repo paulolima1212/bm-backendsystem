@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -49,7 +48,7 @@ export class OrdersService {
     try {
       return this.prismaService.$queryRaw`
         SELECT 
-          o.id, o.client , o.table , o.paymethod , p.name , p.price , op.quantity , (p.price * op.quantity) AS total
+          o.id, o.client , o.table , o.paymethod , op.order_id, p.id AS product_id, p.name , p.price , op.quantity , (p.price * op.quantity) AS total
         FROM 
           orders o 
         INNER JOIN orders_products op 
