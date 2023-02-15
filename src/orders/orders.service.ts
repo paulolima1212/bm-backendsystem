@@ -93,6 +93,32 @@ export class OrdersService {
     return newListOrder;
   }
 
+  async findProductsInOrder() {
+    try {
+      return await this.prismaService.$queryRaw`
+        SELECT
+          p.id,
+          p.name ,
+          SUM(op.quantity) AS quantity
+        FROM
+          orders_products op
+        INNER JOIN orders o 
+                  ON
+          op.order_id = o.id
+        INNER JOIN products p 
+                  ON
+          p.id = op.product_id
+        WHERE
+          o.status = 0
+        GROUP BY 
+          p.name, p.id
+      `;
+    } catch (err) {
+      console.log(err);
+      throw new Error(err);
+    }
+  }
+
   findOne(id: string) {
     try {
       return this.prismaService.order.findFirstOrThrow({

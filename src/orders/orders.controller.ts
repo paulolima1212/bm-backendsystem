@@ -27,6 +27,11 @@ export class OrdersController {
     return this.ordersService.findAll();
   }
 
+  @Get('/products-in-orders')
+  findProducts() {
+    return this.ordersService.findProductsInOrder();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ordersService.findOne(id);
