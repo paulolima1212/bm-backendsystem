@@ -25,7 +25,11 @@ export class CallServiceService {
 
   findAll() {
     try {
-      return this.prismaService.call_Service.findMany();
+      return this.prismaService.call_Service.findMany({
+        orderBy: {
+          create_at: 'asc',
+        },
+      });
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(err);
