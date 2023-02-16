@@ -93,8 +93,8 @@ export class OrdersService {
     return newListOrder;
   }
 
-  findAllOrders() {
-    return this.prismaService.order.findMany();
+  async findOrders() {
+    return await this.prismaService.order.findMany();
   }
 
   async findProductsInOrder() {

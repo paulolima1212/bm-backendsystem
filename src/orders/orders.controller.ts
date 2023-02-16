@@ -33,8 +33,8 @@ export class OrdersController {
   }
 
   @Get('/all-orders')
-  findAllOrders() {
-    return this.findAllOrders();
+  findOrders() {
+    return this.ordersService.findOrders();
   }
 
   @Get(':id')
