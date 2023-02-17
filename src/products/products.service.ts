@@ -41,6 +41,7 @@ export class ProductsService {
           category: {
             select: {
               name: true,
+              is_card: true,
             },
           },
         },
