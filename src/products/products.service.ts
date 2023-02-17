@@ -45,6 +45,9 @@ export class ProductsService {
             },
           },
         },
+        orderBy: {
+          name: 'asc',
+        },
       });
     } catch (err) {
       console.log(err);
