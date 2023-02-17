@@ -95,9 +95,6 @@ export class OrdersService {
 
   async findOrders() {
     return await this.prismaService.order.findMany({
-      where: {
-        status_payment: false,
-      },
       orderBy: {
         create_at: 'asc',
       },
