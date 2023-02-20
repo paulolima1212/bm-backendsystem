@@ -47,5 +47,5 @@ export class CreateProductDto {
 
   @IsNotEmpty()
   @IsString()
-  public categorie_id: string;
+  public category_id: string;
 }
