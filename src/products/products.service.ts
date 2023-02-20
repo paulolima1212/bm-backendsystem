@@ -18,7 +18,7 @@ export class ProductsService {
           name: data.name,
           price: data.price,
           bar_code: data.bar_code,
-          categoryId: data.categorie_id,
+          categoryId: data.category_id,
           cost: data.cost,
           description: data.description,
           image: data.image,
