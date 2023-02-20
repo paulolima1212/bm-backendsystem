@@ -61,6 +61,14 @@ export class ProductsService {
         where: {
           id,
         },
+        include: {
+          category: {
+            select: {
+              name: true,
+              is_card: true,
+            },
+          },
+        },
       });
     } catch (err) {
       console.log(err);
