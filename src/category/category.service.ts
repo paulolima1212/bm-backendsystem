@@ -29,6 +29,9 @@ export class CategoryService {
         where: {
           is_card: true,
         },
+        orderBy: {
+          name: 'asc',
+        },
       });
     } catch (err) {
       console.log(err);
@@ -38,7 +41,11 @@ export class CategoryService {
 
   findAll() {
     try {
-      return this.prismaService.category.findMany();
+      return this.prismaService.category.findMany({
+        orderBy: {
+          name: 'asc',
+        },
+      });
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(err);
