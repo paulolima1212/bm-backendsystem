@@ -1,5 +1,4 @@
 import {
-  ConsoleLogger,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
