@@ -42,23 +42,12 @@ export class OrdersService {
         },
       });
 
-      console.log(productInOrder);
-
       if (!productInOrder) {
         await this.prismaService.order_Product.create({
           data: {
             product_id: product_id.product_id,
             quantity: product_id.quantity,
             order_id: data.id,
-          },
-        });
-      } else {
-        await this.prismaService.order_Product.update({
-          where: {
-            id: productInOrder.id,
-          },
-          data: {
-            quantity: productInOrder.quantity,
           },
         });
       }
