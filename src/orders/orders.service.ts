@@ -14,9 +14,9 @@ export class OrdersService {
 
   async create(data: CreateOrderDto) {
     for (const product_id of data.products_ids) {
-      const orders_products = await this.prismaService.order_Product.findFirst({
+      const orders_products = await this.prismaService.order.findUnique({
         where: {
-          order_id: data.id,
+          id: data.id,
         },
       });
 
