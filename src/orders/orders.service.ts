@@ -38,6 +38,7 @@ export class OrdersService {
       const productInOrder = await this.prismaService.order_Product.findFirst({
         where: {
           product_id: product_id.product_id,
+          order_id: data.id,
         },
       });
 
