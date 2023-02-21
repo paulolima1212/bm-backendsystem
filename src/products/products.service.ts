@@ -82,6 +82,9 @@ export class ProductsService {
         where: {
           categoryId: id,
         },
+        orderBy: {
+          name: 'asc',
+        },
       });
     } catch (err) {
       console.log(err);
