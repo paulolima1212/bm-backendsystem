@@ -32,6 +32,11 @@ export class OrdersController {
     return this.ordersService.findProductsInOrder();
   }
 
+  @Get('/products-in-order-by-id/:id')
+  findProductsInOrderById(@Param('id') id: string) {
+    return this.ordersService.findProductsInOrderById(id);
+  }
+
   @Get('/all-orders')
   findOrders() {
     return this.ordersService.findOrders();
