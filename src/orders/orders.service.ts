@@ -106,7 +106,7 @@ export class OrdersService {
       return await this.prismaService.$queryRaw`
         SELECT
           p.id,
-          p.name ,
+          p.name as product ,
           SUM(op.quantity) AS quantity,
           p.price 
         FROM
