@@ -53,7 +53,7 @@ export class OrdersService {
           },
         });
       } else {
-        this.prismaService.order_Product.update({
+        await this.prismaService.order_Product.update({
           where: {
             id: productInOrder.id,
           },
