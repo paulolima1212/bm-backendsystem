@@ -27,7 +27,7 @@ export class CallServiceService {
     try {
       return this.prismaService.call_Service.findMany({
         orderBy: {
-          create_at: 'asc',
+          create_at: 'desc',
         },
       });
     } catch (err) {
