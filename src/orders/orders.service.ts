@@ -35,38 +35,13 @@ export class OrdersService {
         });
       }
 
-      const productInOrder: Product[] = await this.prismaService.$queryRaw`
-        SELECT
-          p.id,
-          p.name ,
-          SUM(op.quantity) AS quantity,
-          p.price 
-        FROM
-          orders_products op
-        INNER JOIN orders o 
-                          ON
-          op.order_id = o.id
-        INNER JOIN products p 
-                          ON
-          p.id = op.product_id
-        WHERE
-          o.status = 0 AND o.id = ${data.id} AND p.id = ${product_id.product_id}
-        GROUP BY
-          p.name,
-          p.id
-      `;
-
-      console.log(productInOrder);
-
-      if (productInOrder.length > 0) {
-        await this.prismaService.order_Product.create({
-          data: {
-            product_id: product_id.product_id,
-            quantity: product_id.quantity,
-            order_id: data.id,
-          },
-        });
-      }
+      await this.prismaService.order_Product.create({
+        data: {
+          product_id: product_id.product_id,
+          quantity: product_id.quantity,
+          order_id: data.id,
+        },
+      });
     }
   }
 
