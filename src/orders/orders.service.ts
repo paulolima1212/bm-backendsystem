@@ -41,6 +41,8 @@ export class OrdersService {
         },
       });
 
+      console.log(productInOrder);
+
       if (!productInOrder) {
         await this.prismaService.order_Product.create({
           data: {
