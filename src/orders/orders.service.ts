@@ -35,13 +35,21 @@ export class OrdersService {
         });
       }
 
-      await this.prismaService.order_Product.create({
-        data: {
+      const productInOrder = await this.prismaService.order_Product.findFirst({
+        where: {
           product_id: product_id.product_id,
-          quantity: product_id.quantity,
-          order_id: data.id,
         },
       });
+
+      if (!productInOrder) {
+        await this.prismaService.order_Product.create({
+          data: {
+            product_id: product_id.product_id,
+            quantity: product_id.quantity,
+            order_id: data.id,
+          },
+        });
+      }
     }
   }
 
