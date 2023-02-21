@@ -52,6 +52,15 @@ export class OrdersService {
             order_id: data.id,
           },
         });
+      } else {
+        this.prismaService.order_Product.update({
+          where: {
+            id: productInOrder.id,
+          },
+          data: {
+            quantity: product_id.quantity + productInOrder.quantity,
+          },
+        });
       }
     }
   }
