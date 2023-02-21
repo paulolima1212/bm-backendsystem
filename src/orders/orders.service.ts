@@ -35,7 +35,7 @@ export class OrdersService {
         });
       }
 
-      const productInOrder = await this.prismaService.$queryRaw`
+      const productInOrder: Product[] = await this.prismaService.$queryRaw`
         SELECT
           p.id,
           p.name ,
@@ -58,7 +58,7 @@ export class OrdersService {
 
       console.log(productInOrder);
 
-      if (!productInOrder) {
+      if (productInOrder.length > 0) {
         await this.prismaService.order_Product.create({
           data: {
             product_id: product_id.product_id,
