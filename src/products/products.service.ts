@@ -81,6 +81,7 @@ export class ProductsService {
       return this.prismaService.product.findMany({
         where: {
           categoryId: id,
+          use_card: true,
         },
         orderBy: {
           name: 'asc',
