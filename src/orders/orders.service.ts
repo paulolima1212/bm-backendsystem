@@ -54,8 +54,10 @@ export class OrdersService {
         GROUP BY
           p.name,
           p.id
-      
       `;
+
+      console.log(productInOrder);
+
       if (!productInOrder) {
         await this.prismaService.order_Product.create({
           data: {
