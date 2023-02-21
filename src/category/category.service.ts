@@ -24,13 +24,22 @@ export class CategoryService {
     }
   }
 
-  findAll() {
+  findIsCard() {
     try {
       return this.prismaService.category.findMany({
         where: {
           is_card: true,
         },
       });
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException(err);
+    }
+  }
+
+  findAll() {
+    try {
+      return this.prismaService.category.findMany();
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(err);
