@@ -52,13 +52,13 @@ export class OrdersService {
             order_id: data.id,
           },
         });
-      } else if (productInOrder.quantity !== product_id.quantity) {
+      } else {
         await this.prismaService.order_Product.update({
           where: {
             id: productInOrder.id,
           },
           data: {
-            quantity: product_id.quantity + productInOrder.quantity,
+            quantity: productInOrder.quantity,
           },
         });
       }
