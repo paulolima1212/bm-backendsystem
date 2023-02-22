@@ -55,6 +55,18 @@ export class ProductsService {
     }
   }
 
+  findAllProducts() {
+    try {
+      return this.prismaService.product.findMany({
+        orderBy: {
+          name: 'asc',
+        },
+      });
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
+
   findOne(id: string) {
     try {
       return this.prismaService.product.findUnique({
