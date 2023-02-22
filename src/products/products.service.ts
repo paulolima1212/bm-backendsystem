@@ -56,8 +56,16 @@ export class ProductsService {
   }
 
   findAllProducts() {
+    console.log('pass');
     try {
       return this.prismaService.product.findMany({
+        include: {
+          category: {
+            select: {
+              name: true,
+            },
+          },
+        },
         orderBy: {
           name: 'asc',
         },
