@@ -28,12 +28,17 @@ export class CallServiceController {
     return this.callServiceService.findAll();
   }
 
-  @Get(':id')
+  @Get('/calls-not-finished')
+  findCallsNotFinished() {
+    return this.callServiceService.findNotFinished();
+  }
+
+  @Get('/call/:id')
   findOne(@Param('id') id: string) {
     return this.callServiceService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('/call/:id')
   update(
     @Param('id') id: string,
     @Body() updateCallServiceDto: UpdateCallServiceDto,
@@ -41,7 +46,7 @@ export class CallServiceController {
     return this.callServiceService.update(id, updateCallServiceDto);
   }
 
-  @Delete(':id')
+  @Delete('/call:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
     return this.callServiceService.remove(id);

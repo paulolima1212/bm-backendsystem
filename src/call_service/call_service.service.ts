@@ -36,6 +36,18 @@ export class CallServiceService {
     }
   }
 
+  findNotFinished() {
+    try {
+      return this.prismaService.call_Service.findMany({
+        where: {
+          is_done: false,
+        },
+      });
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
+
   findOne(id: string) {
     try {
       return this.prismaService.call_Service.findFirstOrThrow({
