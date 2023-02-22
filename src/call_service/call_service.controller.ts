@@ -8,7 +8,6 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
-  ParseUUIDPipe,
 } from '@nestjs/common';
 import { CallServiceService } from './call_service.service';
 import { CreateCallServiceDto } from './dto/create-call_service.dto';
