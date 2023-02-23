@@ -164,9 +164,7 @@ export class OrdersService {
         WHERE
           o.status = 0
         GROUP BY 
-          p.name, p.id, o.create_at 
-        ORDER BY 
-          o.create_at 
+          p.name, p.id
       `;
     } catch (err) {
       console.log(err);
