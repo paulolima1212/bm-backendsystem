@@ -36,7 +36,7 @@ export class ProductsController {
   }
 
   @Get('/product-with-stock/:id')
-  findProductWithStock(@Param('id') id: string) {
+  findProductWithStockById(@Param('id') id: string) {
     return this.productsService.findProductWithStockById(id);
   }
 
