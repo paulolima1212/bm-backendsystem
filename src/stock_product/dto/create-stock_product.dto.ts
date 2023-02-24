@@ -1,5 +1,10 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
+enum TypeStockInput {
+  IN = 'IN',
+  OUT = 'OUT',
+}
+
 export class CreateStockProductDto {
   @IsNotEmpty()
   @IsNumber()
@@ -8,4 +13,8 @@ export class CreateStockProductDto {
   @IsNotEmpty()
   @IsString()
   public product_id: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public type: TypeStockInput;
 }

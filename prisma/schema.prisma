@@ -95,54 +95,42 @@ model Order_Product {
 }
 
 model Product {
-  id             String          @id @default(uuid())
-  bar_code       String?         @unique
+  id             String        @id @default(uuid())
+  bar_code       String?       @unique
   name           String
   price          Decimal
-  cost           Decimal         @default(0.000000000000000000000000000000)
-  unit           products_unit   @default(UN)
-  description    String?         @default("")
-  image          String?         @default("")
-  validate_stock Boolean         @default(false)
-  use_card       Boolean         @default(false)
-  special_card   Boolean         @default(false)
+  cost           Decimal       @default(0.000000000000000000000000000000)
+  unit           products_unit @default(UN)
+  description    String?       @default("")
+  image          String?       @default("")
+  validate_stock Boolean       @default(false)
+  use_card       Boolean       @default(false)
+  special_card   Boolean       @default(false)
   categoryId     String
-  create_at      DateTime        @default(now())
-  category       Category        @relation(fields: [categoryId], references: [id])
-  Stock_Product  Stock_Product[]
+  create_at      DateTime      @default(now())
+  category       Category      @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
   @@map("products")
 }
 
 model Stock {
-  id            String          @id @default(uuid())
-  quant         Decimal
-  create_at     DateTime        @default(now())
-  updated_at    DateTime        @default(now())
-  Stock_Product Stock_Product[]
+  id         String     @id @default(uuid())
+  quant      Decimal
+  type       stock_type
+  product_id String
+  create_at  DateTime   @default(now())
+  updated_at DateTime   @default(now())
 
+  @@index([product_id])
   @@map("stocks")
-}
-
-model Stock_Product {
-  id        String   @id @default(uuid())
-  create_at DateTime @default(now())
-  productId String
-  stockId   String
-  product   Product  @relation(fields: [productId], references: [id])
-  stock     Stock    @relation(fields: [stockId], references: [id])
-
-  @@index([productId])
-  @@index([stockId])
-  @@map("stocks_products")
 }
 
 model User {
   id       String @id @default(uuid())
   email    String @unique
   password String
-  username String
+  username String @unique
 
   @@map("users")
 }
@@ -160,4 +148,9 @@ enum orders_paymethod {
 enum products_unit {
   UN
   KG
+}
+
+enum stock_type {
+  IN
+  OUT
 }

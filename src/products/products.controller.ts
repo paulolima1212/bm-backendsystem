@@ -25,6 +25,11 @@ export class ProductsController {
     return this.productsService.findAllProducts();
   }
 
+  @Get('/all-products-with-stock')
+  findAllProductWithStock() {
+    return this.productsService.findAllProductsWithStock();
+  }
+
   @Get('/product/:id')
   findByCategory(@Param('id') id: string) {
     return this.productsService.findByCategory(id);

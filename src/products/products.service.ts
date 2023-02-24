@@ -55,6 +55,55 @@ export class ProductsService {
     }
   }
 
+  findAllProductsWithStock() {
+    try {
+      return this.prismaService.$queryRaw`
+        SELECT 
+          p.bar_code,
+          c.is_card,
+          c.name,
+          p.categoryId,
+          p.cost,
+          p.create_at,
+          p.description,
+          p.id,
+          p.image,
+          p.name,
+          p.price,
+          p.special_card,
+          p.unit,
+          p.use_card,
+          p.validate_stock,
+          (
+            SELECT DISTINCT 
+          (SELECT 
+            IFNULL(SUM(s.quant),0) 
+          FROM 
+            stocks s 
+          WHERE 
+            product_id = s2.product_id  AND s.type = 'IN') - 
+          (SELECT 
+            IFNULL(SUM(s.quant),0) 
+          FROM 
+            stocks s 
+          WHERE 
+              product_id = s2.product_id  AND s.type = 'OUT') AS stock_atual
+          FROM 
+            stocks s2 
+          WHERE 
+            s2.product_id = p.id 
+          ) AS stock
+        FROM 
+          products p
+        INNER JOIN categories c 
+          ON
+          c.id = p.categoryId
+      `;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
+
   findAllProducts() {
     console.log('pass');
     try {

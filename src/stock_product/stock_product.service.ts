@@ -12,16 +12,13 @@ import { PrismaService } from '../prisma/prisma.service';
 export class StockProductService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create({ product_id, quant }: CreateStockProductDto) {
+  create({ product_id, quant, type }: CreateStockProductDto) {
     try {
       return this.prismaService.stock.create({
         data: {
           quant,
-          Stock_Product: {
-            create: {
-              productId: product_id,
-            },
-          },
+          type,
+          product_id,
         },
       });
     } catch (err) {
