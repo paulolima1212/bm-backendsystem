@@ -20,6 +20,14 @@ export class OrdersService {
         },
       });
 
+      await this.prismaService.stock.create({
+        data: {
+          product_id: product_id.product_id,
+          quant: product_id.quantity,
+          type: 'OUT',
+        },
+      });
+
       if (!orders_products) {
         await this.prismaService.order.create({
           data: {
