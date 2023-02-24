@@ -98,6 +98,8 @@ export class ProductsService {
         INNER JOIN categories c 
           ON
           c.id = p.categoryId
+        ORDER BY 
+	        p.name 
       `;
     } catch (err) {
       throw new InternalServerErrorException(err);
