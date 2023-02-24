@@ -74,7 +74,7 @@ export class ProductsService {
           p.unit,
           p.use_card,
           p.validate_stock,
-          (
+          IFNULL((
             SELECT DISTINCT 
           (SELECT 
             IFNULL(SUM(s.quant),0) 
@@ -92,7 +92,7 @@ export class ProductsService {
             stocks s2 
           WHERE 
             s2.product_id = p.id 
-          ) AS stock
+          ), 0) AS stock
         FROM 
           products p
         INNER JOIN categories c 
@@ -123,7 +123,7 @@ export class ProductsService {
           p.unit,
           p.use_card,
           p.validate_stock,
-          (
+          IFNULL((
             SELECT DISTINCT 
           (SELECT 
             IFNULL(SUM(s.quant),0) 
@@ -141,7 +141,7 @@ export class ProductsService {
             stocks s2 
           WHERE 
             s2.product_id = p.id 
-          ) AS stock
+          ),0) AS stock
         FROM 
           products p
         INNER JOIN categories c 
