@@ -200,15 +200,52 @@ export class ProductsService {
 
   findByCategory(id: string) {
     try {
-      return this.prismaService.product.findMany({
-        where: {
-          categoryId: id,
-          use_card: true,
-        },
-        orderBy: {
-          name: 'asc',
-        },
-      });
+      return this.prismaService.$queryRaw`
+        SELECT 
+          p.bar_code,
+          c.is_card,
+          c.name AS category_name,
+          p.categoryId,
+          p.cost,
+          p.create_at,
+          p.description,
+          p.id,
+          p.image,
+          p.name,
+          p.price,
+          p.special_card,
+          p.unit,
+          p.use_card,
+          p.validate_stock,
+          IFNULL((
+            SELECT DISTINCT 
+          (SELECT 
+            IFNULL(SUM(s.quant),0) 
+          FROM 
+            stocks s 
+          WHERE 
+            product_id = s2.product_id  AND s.type = 'IN') - 
+          (SELECT 
+            IFNULL(SUM(s.quant),0) 
+          FROM 
+            stocks s 
+          WHERE 
+              product_id = s2.product_id  AND s.type = 'OUT') AS stock_atual
+          FROM 
+            stocks s2 
+          WHERE 
+            s2.product_id = p.id 
+          ),0) AS stock
+        FROM 
+          products p
+        INNER JOIN categories c 
+          ON
+          c.id = p.categoryId
+        WHERE 
+          c.id = ${id}
+        ORDER BY 
+          p.name 
+      `;
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(err);
