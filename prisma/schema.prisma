@@ -8,24 +8,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-model CategoryToExtra {
-  A String
-  B String
-
-  @@unique([A, B], map: "_CategoryToExtra_AB_unique")
-  @@index([B], map: "_CategoryToExtra_B_index")
-  @@map("_CategoryToExtra")
-}
-
-model CategoryToOption {
-  A String
-  B String
-
-  @@unique([A, B], map: "_CategoryToOption_AB_unique")
-  @@index([B], map: "_CategoryToOption_B_index")
-  @@map("_CategoryToOption")
-}
-
 model Call_Service {
   id         String                @id @default(uuid())
   client     String
@@ -108,7 +90,7 @@ model Product {
   special_card   Boolean       @default(false)
   categoryId     String
   create_at      DateTime      @default(now())
-  category       Category?     @relation(fields: [categoryId], references: [id])
+  Category       Category      @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
   @@map("products")

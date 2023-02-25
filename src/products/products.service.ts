@@ -38,7 +38,7 @@ export class ProductsService {
     try {
       return this.prismaService.product.findMany({
         include: {
-          category: {
+          Category: {
             select: {
               name: true,
               is_card: true,
@@ -162,7 +162,7 @@ export class ProductsService {
     try {
       return this.prismaService.product.findMany({
         include: {
-          category: {
+          Category: {
             select: {
               name: true,
             },
@@ -184,7 +184,7 @@ export class ProductsService {
           id,
         },
         include: {
-          category: {
+          Category: {
             select: {
               name: true,
               is_card: true,
@@ -252,13 +252,13 @@ export class ProductsService {
     }
   }
 
-  update(id: string, updateProductDto: UpdateProductDto) {
+  update(id: string, data: UpdateProductDto) {
     try {
       return this.prismaService.product.update({
         where: {
           id,
         },
-        data: updateProductDto,
+        data,
       });
     } catch (err) {
       console.log(err);
