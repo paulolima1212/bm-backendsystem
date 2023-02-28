@@ -96,6 +96,17 @@ model Product {
   @@map("products")
 }
 
+model Product_Option_Extra {
+  id         String  @id @default(uuid())
+  product_id String
+  order_id   String
+  option_id  String?
+  extra_id   String?
+
+  @@index([product_id, option_id, extra_id])
+  @@map("products_options_extras")
+}
+
 model Stock {
   id         String     @id @default(uuid())
   quant      Decimal
