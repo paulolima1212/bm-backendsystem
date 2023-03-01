@@ -66,10 +66,11 @@ model Order {
 }
 
 model Order_Product {
-  id         String @id @default(uuid())
+  id         String   @id @default(uuid())
   order_id   String
   product_id String
   quantity   Float
+  created_at DateTime @default(now())
 
   @@index([order_id])
   @@index([product_id])
@@ -96,15 +97,24 @@ model Product {
   @@map("products")
 }
 
-model Product_Option_Extra {
-  id         String  @id @default(uuid())
+model Product_Order_Option {
+  id         String @id @default(uuid())
   product_id String
   order_id   String
-  option_id  String?
-  extra_id   String?
+  option_id  String
 
-  @@index([product_id, option_id, extra_id])
-  @@map("products_options_extras")
+  @@index([product_id, option_id, order_id])
+  @@map("products_orders_options")
+}
+
+model Product_Order_Extra {
+  id         String @id @default(uuid())
+  product_id String
+  order_id   String
+  extra_id   String
+
+  @@index([product_id, extra_id, order_id])
+  @@map("products_orders_extras")
 }
 
 model Stock {

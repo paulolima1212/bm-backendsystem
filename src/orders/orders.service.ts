@@ -28,6 +28,30 @@ export class OrdersService {
         },
       });
 
+      if (product_id.extras.length > 0) {
+        product_id.extras.map(async (extra) => {
+          await this.prismaService.product_Order_Extra.create({
+            data: {
+              extra_id: extra.id,
+              order_id: data.id,
+              product_id: product_id.product_id,
+            },
+          });
+        });
+      }
+
+      if (product_id.options.length > 0) {
+        product_id.options.map(async (option) => {
+          await this.prismaService.product_Order_Option.create({
+            data: {
+              option_id: option.id,
+              order_id: data.id,
+              product_id: product_id.product_id,
+            },
+          });
+        });
+      }
+
       if (!orders_products) {
         await this.prismaService.order.create({
           data: {

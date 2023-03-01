@@ -12,9 +12,24 @@ enum PayOption {
   DINHEIRO = 'DINHEIRO',
 }
 
+interface Option {
+  id: string;
+  option: string;
+  create_at: string;
+}
+
+interface Extra {
+  id: string;
+  option: string;
+  price: string;
+  create_at: string;
+}
+
 interface IProductsIdsProps {
   product_id: string;
   quantity: number;
+  options: Option[];
+  extras: Extra[];
 }
 
 export class CreateOrderDto {
