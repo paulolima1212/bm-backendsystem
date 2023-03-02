@@ -124,10 +124,31 @@ export class OrdersService {
           o.create_at
       `;
 
+    const listOptions =
+      await this.prismaService.product_Order_Option.findMany();
+    const listExtras = await this.prismaService.product_Order_Extra.findMany();
+
     const newListOrder = orders.map((order) => {
       const products = listProducts.filter((product) => {
+        const extras = listExtras.filter((extra) => {
+          if (extra.product_id === product.id && extra.order_id === order.id) {
+            return extras;
+          }
+        });
+        const options = listOptions.filter((option) => {
+          if (
+            option.product_id === product.id &&
+            option.option_id === order.id
+          ) {
+            return option;
+          }
+        });
         if (product.order_id === order.id) {
-          return product;
+          return {
+            ...product,
+            options: options,
+            extras: extras,
+          };
         }
       });
 
