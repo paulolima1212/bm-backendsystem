@@ -129,12 +129,13 @@ export class OrdersService {
     const listExtras = await this.prismaService.product_Order_Extra.findMany();
 
     const newListOrder = orders.map((order) => {
-      const products = listProducts.filter((product) => {
+      const products = listProducts.map((product) => {
         const extras = listExtras.filter((extra) => {
           if (extra.product_id === product.id && extra.order_id === order.id) {
             return extra;
           }
         });
+
         const options = listOptions.filter((option) => {
           if (
             option.product_id === product.id &&
@@ -143,24 +144,32 @@ export class OrdersService {
             return option;
           }
         });
+
         if (product.order_id === order.id) {
-          return {
+          const newProduct = {
             ...product,
             options: options,
             extras: extras,
           };
+
+          return newProduct;
         }
+
+        return null;
       });
+
+      const newListProducts = products.filter((product) => product !== null);
 
       return {
         id: order.id,
         client: order.client,
         table: order.table,
         paymethod: order.paymethod,
-        products,
+        products: newListProducts,
       };
     });
 
+    console.log(newListOrder);
     return newListOrder;
   }
 
