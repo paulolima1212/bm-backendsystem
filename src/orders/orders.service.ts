@@ -132,7 +132,7 @@ export class OrdersService {
       const products = listProducts.filter((product) => {
         const extras = listExtras.filter((extra) => {
           if (extra.product_id === product.id && extra.order_id === order.id) {
-            return extras;
+            return extra;
           }
         });
         const options = listOptions.filter((option) => {
