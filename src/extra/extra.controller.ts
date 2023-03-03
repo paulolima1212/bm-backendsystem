@@ -7,10 +7,16 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { ExtraService } from './extra.service';
 import { CreateExtraDto } from './dto/create-extra.dto';
 import { UpdateExtraDto } from './dto/update-extra.dto';
+
+interface QueryProps {
+  order_id: string;
+  product_id: string;
+}
 
 @Controller('extra')
 export class ExtraController {
@@ -26,9 +32,9 @@ export class ExtraController {
     return this.extraService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.extraService.findOne(id);
+  @Get('/extras')
+  findOne(@Query() query: QueryProps) {
+    return this.extraService.findOne(query.order_id, query.product_id);
   }
 
   @Patch(':id')

@@ -32,13 +32,18 @@ export class ExtraService {
     }
   }
 
-  findOne(id: string) {
+  async findOne(order_id: string, product_id: string) {
     try {
-      return this.prismaService.extra.findUnique({
-        where: {
-          id,
-        },
-      });
+      return await this.prismaService.$queryRaw`
+        SELECT 
+          e.option 
+        FROM 
+          products_orders_extras poe 
+        INNER JOIN	extras e  
+          ON poe.extra_id  = e.id 
+        WHERE 
+          poe.order_id = ${order_id} AND poe.product_id = ${product_id}
+      `;
     } catch (err) {
       console.log(err);
       throw new NotFoundException(err);

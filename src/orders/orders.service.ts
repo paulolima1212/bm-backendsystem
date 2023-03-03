@@ -7,6 +7,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Order, Product } from './dto/order.dto';
+import { Product_Order_Extra, Product_Order_Option } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
@@ -109,6 +110,7 @@ export class OrdersService {
         ORDER BY
           o.create_at
       `;
+
     const listProducts: Product[] = await this.prismaService.$queryRaw`
         SELECT
           o.id AS order_id, p.id , p.name , p.price , op.quantity 
@@ -124,53 +126,50 @@ export class OrdersService {
           o.create_at
       `;
 
-    const listOptions =
-      await this.prismaService.product_Order_Option.findMany();
-    const listExtras = await this.prismaService.product_Order_Extra.findMany();
-
     const newListOrder = orders.map((order) => {
-      const products = listProducts.map((product) => {
-        const extras = listExtras.filter((extra) => {
-          if (extra.product_id === product.id && extra.order_id === order.id) {
-            return extra;
-          }
-        });
-
-        const options = listOptions.filter((option) => {
-          if (
-            option.product_id === product.id &&
-            option.option_id === order.id
-          ) {
-            return option;
-          }
-        });
-
+      const products = listProducts.filter((product) => {
         if (product.order_id === order.id) {
-          const newProduct = {
-            ...product,
-            options: options,
-            extras: extras,
-          };
-
-          return newProduct;
+          return product;
         }
-
-        return null;
       });
-
-      const newListProducts = products.filter((product) => product !== null);
 
       return {
         id: order.id,
         client: order.client,
         table: order.table,
         paymethod: order.paymethod,
-        products: newListProducts,
+        products,
       };
     });
 
-    console.log(newListOrder);
     return newListOrder;
+  }
+
+  async getOptionsAndExtras(order_id: string, product_id: string) {
+    const extras = await this.prismaService.$queryRaw<Product_Order_Extra[]>`
+        SELECT 
+          e.option 
+        FROM 
+          products_orders_extras poe 
+        INNER JOIN	extras e  
+          ON poe.extra_id  = e.id 
+        WHERE 
+          poe.order_id = ${order_id} AND poe.product_id = ${product_id}
+      `;
+    const options = await this.prismaService.$queryRaw<Product_Order_Option[]>`
+        SELECT 
+          o.option 
+        FROM 
+          products_orders_options poo 
+        INNER JOIN	options o 
+          ON poo.option_id = o.id 
+        WHERE 
+          poo.order_id = ${order_id} AND poo.product_id = ${product_id}
+      `;
+    return {
+      extras,
+      options,
+    };
   }
 
   async findOrders() {
