@@ -31,7 +31,7 @@ export class OptionService {
     try {
       return await this.prismaService.$queryRaw`
       SELECT 
-        o.option 
+        o.id, o.option 
       FROM 
         products_orders_options poo 
       INNER JOIN	options o 
