@@ -36,7 +36,7 @@ export class ExtraService {
     try {
       return await this.prismaService.$queryRaw`
         SELECT 
-          e.id, e.option 
+          e.id, e.option, e.price 
         FROM 
           products_orders_extras poe 
         INNER JOIN	extras e  
