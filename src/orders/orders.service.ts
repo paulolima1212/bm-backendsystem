@@ -213,19 +213,20 @@ export class OrdersService {
         SELECT
           p.id,
           p.name ,
-          SUM(op.quantity) AS quantity
+          op.quantity,
+          op.created_at 
         FROM
           orders_products op
         INNER JOIN orders o 
-                  ON
+                          ON
           op.order_id = o.id
         INNER JOIN products p 
-                  ON
+                          ON
           p.id = op.product_id
         WHERE
           o.status = 0
-        GROUP BY 
-          p.name, p.id
+        ORDER BY 
+          o.create_at 
       `;
     } catch (err) {
       console.log(err);
