@@ -158,7 +158,6 @@ export class ProductsService {
   }
 
   findAllProducts() {
-    console.log('pass');
     try {
       return this.prismaService.product.findMany({
         include: {

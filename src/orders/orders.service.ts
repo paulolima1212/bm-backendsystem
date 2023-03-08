@@ -4,10 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Order, Product } from './dto/order.dto';
 import { Product_Order_Extra, Product_Order_Option } from '@prisma/client';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -29,8 +29,8 @@ export class OrdersService {
         },
       });
 
-      if (product_id.extras.length > 0) {
-        product_id.extras.map(async (extra) => {
+      if (product_id.extras?.length > 0) {
+        product_id.extras?.map(async (extra) => {
           await this.prismaService.product_Order_Extra.create({
             data: {
               extra_id: extra.id,
@@ -41,8 +41,8 @@ export class OrdersService {
         });
       }
 
-      if (product_id.options.length > 0) {
-        product_id.options.map(async (option) => {
+      if (product_id.options?.length > 0) {
+        product_id.options?.map(async (option) => {
           await this.prismaService.product_Order_Option.create({
             data: {
               option_id: option.id,
@@ -247,17 +247,64 @@ export class OrdersService {
     }
   }
 
-  update(id: string, data: UpdateOrderDto) {
+  async finishOrder(id: string, data: UpdateOrderDto) {
     try {
       return this.prismaService.order.update({
         where: {
           id,
         },
-        data,
+        data: {
+          status: data.status,
+          status_payment: data.status_payment,
+        },
       });
-    } catch (err) {
-      console.log(err);
-      throw new InternalServerErrorException(err);
+    } catch (err) {}
+  }
+
+  async update(id: string, data: any) {
+    const orderID = await this.prismaService.order_Product.findFirst({
+      where: {
+        order_id: id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    for (const product_id of data.products_ids) {
+      const existsProduct = await this.prismaService.order_Product.findFirst({
+        where: {
+          AND: {
+            order_id: id,
+            product_id: product_id.product_id,
+          },
+        },
+      });
+
+      console.log(existsProduct);
+
+      if (existsProduct) {
+        console.log('pass1');
+        await this.prismaService.order_Product.update({
+          where: {
+            id: existsProduct.id,
+          },
+          data: {
+            product_id: product_id.product_id,
+            quantity: product_id.quantity,
+            order_id: id,
+          },
+        });
+      } else {
+        console.log('pass2');
+        await this.prismaService.order_Product.create({
+          data: {
+            product_id: product_id.product_id,
+            quantity: product_id.quantity,
+            order_id: id,
+          },
+        });
+      }
     }
   }
 
