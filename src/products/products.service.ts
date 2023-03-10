@@ -241,7 +241,7 @@ export class ProductsService {
           ON
           c.id = p.categoryId
         WHERE 
-          c.id = ${id}
+          c.id = ${id} AND p.use_card = 1
         ORDER BY 
           p.name 
       `;
