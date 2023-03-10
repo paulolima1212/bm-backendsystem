@@ -214,7 +214,8 @@ export class OrdersService {
           p.id,
           p.name ,
           op.quantity,
-          op.created_at 
+          op.created_at,
+          o.status
         FROM
           orders_products op
         INNER JOIN orders o 
