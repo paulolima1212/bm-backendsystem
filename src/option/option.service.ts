@@ -28,6 +28,7 @@ export class OptionService {
   }
 
   async findOne(order_id: string, product_id: string) {
+    console.log('pass');
     try {
       return await this.prismaService.$queryRaw`
       SELECT 
