@@ -11,7 +11,6 @@ export class CreateCategoryDto {
   @IsString()
   public image: string;
 
-  @IsNotEmpty()
   @IsString()
   public option_id: string;
 

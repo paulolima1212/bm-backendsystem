@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  glassdb:
+    image: mysql
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_USERNAME=docker
+      - MYSQL_ROOT_PASSWORD=docker
+      - MYSQL_DATABASE=bmsystem
+    volumes:
+      - .docker/db:/var/lib/mysql
